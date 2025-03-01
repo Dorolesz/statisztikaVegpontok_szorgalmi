@@ -1,0 +1,14 @@
+.app {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.statistic-card {
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  width: 200px;
+  text-align: center;
+}
