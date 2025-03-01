@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
-import './index.css'; // Import the new CSS file
+import './index.css';
 import StatisticCard from './StatisticCardProps';
 
 interface User {
@@ -11,27 +12,27 @@ interface User {
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/user')
+    axios.get('http://localhost:3000/user')
       .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Expect JSON response
-      })
-      .then(data => {
-        console.log('Fetched data:', data); // Log fetched data
-        if (Array.isArray(data)) {
-          setUsers(data);
+        if (Array.isArray(response.data)) {
+          setUsers(response.data);
         } else {
-          throw new Error('Data is not an array');
+          console.error('Unexpected response data format:', response.data);
         }
+        setLoading(false);
       })
       .catch(error => {
-        console.error('Error fetching data:', error);
+        console.error('There was an error fetching the users!', error);
+        setLoading(false);
       });
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="app">
